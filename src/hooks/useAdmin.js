@@ -21,11 +21,11 @@ export const useAdmin = () => {
         }
     }
 
-    const addKontak = async (token, nama_kontak, no_telp) => {
+    const addKontak = async (token, nama_kontak, no_telp, apiKey) => {
         setIsLoading(true)
         setError(null)
         try {
-            const res = await api.post(`/addKontak`, {nama_kontak, no_telp}, {
+            const res = await api.post(`/addKontak`, {nama_kontak, no_telp, apiKey}, {
                 headers: {Authorization: `Bearer ${token}`}
             });
             setIsLoading(false)
@@ -39,11 +39,11 @@ export const useAdmin = () => {
         }
     }
 
-    const updateKontak = async (token, new_nama_kontak, new_no_telp, id) => {
+    const updateKontak = async (token, new_nama_kontak, new_no_telp, new_apikey, id) => {
         setIsLoading(true)
         setError(null)
         try {
-            const res = await api.patch(`/updateKontakInfo`, {id, new_nama_kontak, new_no_telp}, {
+            const res = await api.patch(`/updateKontakInfo`, {id, new_nama_kontak, new_no_telp, new_apikey}, {
                 headers: {Authorization: `Bearer ${token}`}
             });
             setIsLoading(false)

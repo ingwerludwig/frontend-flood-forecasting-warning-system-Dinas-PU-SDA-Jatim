@@ -68,17 +68,40 @@ const Main = () => {
         const loadData = async () => {
             let stasiunName = "Cendono"
             let res = await getSensorHistory("def", 0, 1, stasiunName)
-                res = res.data.history[0]
-                const curah_hujan = stasiunName === "Cendono" ? res.curah_hujan_cendono : res.curah_hujan_lawang;
+            res = res.data.history[0]
+            const curah_hujan = stasiunName === "Cendono" ? res.curah_hujan_cendono : res.curah_hujan_lawang;
 
-                const rainValues = Array.from({ length: 20 }, (_, i) => (i + 1) * 5);
-                const matchedValue = rainValues.find(value => value === curah_hujan);
+            let roundedValue;
             
-                if (matchedValue) {
-                    setImageSrc(`https://sih3.dpuair.jatimprov.go.id/ffwsview/R${matchedValue}mm.jpg`);
-                } else {
-                    setImageSrc('https://sih3.dpuair.jatimprov.go.id/ffwsview/Gambar_sungai.jpeg'); // No image for other conditions
-                }
+            if (curah_hujan >= 3 && curah_hujan < 5) {
+                roundedValue = 5; // Special case: round 3 and 4 up to 5
+            } else if (curah_hujan >= 5 && curah_hujan < 10) {
+                roundedValue = Math.ceil(curah_hujan / 5) * 5; // Round up to nearest 5
+            } else if (curah_hujan >= 10 && curah_hujan < 20) {
+                roundedValue = Math.ceil(curah_hujan / 5) * 5; // Round up to nearest 5
+            } else if (curah_hujan >= 20 && curah_hujan < 30) {
+                roundedValue = Math.ceil(curah_hujan / 5) * 5; // Round up to nearest 5
+            } else if (curah_hujan >= 30 && curah_hujan < 40) {
+                roundedValue = Math.ceil(curah_hujan / 5) * 5; // Round up to nearest 5
+            } else if (curah_hujan >= 40 && curah_hujan < 50) {
+                roundedValue = Math.ceil(curah_hujan / 5) * 5; // Round up to nearest 5
+            } else if (curah_hujan >= 50 && curah_hujan < 60) {
+                roundedValue = Math.ceil(curah_hujan / 10) * 10; // Round up to nearest 10
+            } else if (curah_hujan >= 60 && curah_hujan < 70) {
+                roundedValue = Math.ceil(curah_hujan / 10) * 10; // Round up to nearest 10
+            } else if (curah_hujan >= 70 && curah_hujan < 80) {
+                roundedValue = Math.ceil(curah_hujan / 10) * 10; // Round up to nearest 10
+            } else if (curah_hujan >= 80 && curah_hujan < 90) {
+                roundedValue = Math.ceil(curah_hujan / 10) * 10; // Round up to nearest 10
+            } else if (curah_hujan >= 90 && curah_hujan <= 100) {
+                roundedValue = Math.ceil(curah_hujan / 10) * 10; // Round up to nearest 10
+            }
+
+            if (roundedValue >= 5 && roundedValue <= 100) {
+                setImageSrc(`https://sih3.dpuair.jatimprov.go.id/ffwsview/R${roundedValue}mm.jpg`);
+            } else {
+                setImageSrc('https://sih3.dpuair.jatimprov.go.id/ffwsview/Gambar_sungai.jpeg'); // No image for other conditions
+            }
           }
           loadData()
 
@@ -97,6 +120,10 @@ const Main = () => {
                 <div className="rounded-md text-sm border shadow px-3 py-1 ml-7 min-w-[150px]">
                     <p className="text-zinc-500 text-xs">Tanggal</p>
                     <p className="font-medium">{getDayName(currentDate) + ', ' + currentDate.toISOString().slice(0, 10)}</p>
+                </div>
+                <div className="rounded-md text-sm border shadow px-3 py-1 ml-7 min-w-[150px]">
+                    <p className="text-zinc-500 text-xs">Kirim Request untuk Notifikasi</p>
+                    <a href="https://api.whatsapp.com/send?phone=34621371153&text=I%20allow%20callmebot%20to%20send%20me%20messages" target="_blank" style={{ color: 'red' }}>KLIK DISINI</a>
                 </div>
             </div>
             <div className="grid grid-rows-12">
