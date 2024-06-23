@@ -34,7 +34,7 @@ const Main = () => {
 
     
     const { user } = useAuthContext();
-    const { getStasiunLimitAir, isLoading, error } = useGetData();
+    const { getStasiunLimitAir, getSensorHistory, isLoading, error } = useGetData();
     const { getDayName, getTime } = useGetDate();
 
     
@@ -53,6 +53,7 @@ const Main = () => {
         setIsModel(false)
     }
     
+    const [imageSrc, setImageSrc] = useState(null); 
 
     useEffect(() => {
         if (stasiun !== 'Dhompo' && stasiun !== 'Purwodadi') {
@@ -63,6 +64,24 @@ const Main = () => {
             const {batas_air_siaga, batas_air_awas} = res.data || [-1, -1]
             setLimitAir([batas_air_siaga, batas_air_awas])
         }).catch()
+
+        const loadData = async () => {
+            let stasiunName = "Cendono"
+            let res = await getSensorHistory("def", 0, 1, stasiunName)
+                res = res.data.history[0]
+                const curah_hujan = stasiunName === "Cendono" ? res.curah_hujan_cendono : res.curah_hujan_lawang;
+
+                const rainValues = Array.from({ length: 20 }, (_, i) => (i + 1) * 5);
+                const matchedValue = rainValues.find(value => value === curah_hujan);
+            
+                if (matchedValue) {
+                    setImageSrc(`https://sih3.dpuair.jatimprov.go.id/ffwsview/R${matchedValue}mm.jpg`);
+                } else {
+                    setImageSrc('https://sih3.dpuair.jatimprov.go.id/ffwsview/Gambar_sungai.jpeg'); // No image for other conditions
+                }
+          }
+          loadData()
+
     }, [])
 
     return ( 
@@ -152,6 +171,7 @@ const Main = () => {
                         </div>
                         <CrossDesign levelAir={prediksiAir}/>
                     </div> : 
+                    
                     <div className="rounded-md border p-5 shadow w-full relative">
                         <div className="absolute top-1 right-1 flex items-center">
                             <p className="text-xs italic">Klik icon untuk sembunyikan gambar</p>
@@ -162,7 +182,7 @@ const Main = () => {
                         </div>
                         <p className="font-semibold text-sm text-left">Gambar Sungai Stasiun {stasiun}</p>
                         <div className="rounded-lg overflow-hidden m-3">
-                            <img src="/ffwsview/Gambar_sungai.jpeg" alt="" className="w-full h-full object-contain"/>
+                            <img src={imageSrc} alt="" className="w-full h-full object-contain"/>
                         </div>
                     </div>
                     }

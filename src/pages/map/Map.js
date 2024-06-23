@@ -26,6 +26,15 @@ const MarkerCustom = ({text, color}) => {
     )
 }
 
+const curahHujanLevels = {
+  'Tidak Hujan': 'bg-green-200 group-hover:bg-green-400',
+  'Sangat Ringan': 'bg-aqua-400 group-hover:bg-aqua-600',
+  'Ringan': 'bg-blue-400 group-hover:bg-blue-600',
+  'Sedang': 'bg-yellow-400 group-hover:bg-yellow-600',
+  'Lebat': 'bg-orange-400 group-hover:bg-orange-600',
+  'Sangat Lebat': 'bg-red-400 group-hover:bg-red-600',
+};
+
 const EnhancedMarker = ({
     eventHandlers,
     icon: providedIcon,
@@ -202,23 +211,36 @@ const Map = () => {
                   <p className='text-lg font-semibold'> Simulasi penelusuran banjir DAS Welang</p>
                   <div className="flex flex-row">
                     <div className="w-[50%]">
-                        <img src="Hilir.gif" alt="" className="w-full object-contain"/>
+                        <img src="https://sih3.dpuair.jatimprov.go.id/ffwsview/Hilir.gif" alt="" className="w-full object-contain"/>
                     </div>
                     <div className="w-[50%]">
-                        <img src="Hulu.gif" alt="" className="w-full object-contain"/>
+                        <img src="https://sih3.dpuair.jatimprov.go.id/ffwsview/Hulu.gif" alt="" className="w-full object-contain"/>
                     </div>
                   </div>
                 </div>
                 <div className='p-5'>
                   <p className="font-semibold py-3">Keterangan pada Peta</p>
                       <div className="flex items-center">
+                        <p>Hilir = Dhompo</p>
+                      </div>
+                      <div className="flex items-center">
+                        <p>Hulu = Purwodadi</p>
+                      </div>
+                      <div className="flex items-center">
                         <div className="w-[50px] h-[20px] border-2 border-black mx-1"></div>
-                        <p>Curah Hujan</p>
+                        <p> = Curah Hujan</p>
                       </div>
                       <div className="flex items-center my-3">
                         <div className="w-[50px] h-[20px] border-2 rounded-full border-black mx-1"></div>
-                        <p>Air Sungai</p>
+                        <p> = Air Sungai</p>
                       </div>
+                      {Object.entries(curahHujanLevels).map(([level, className]) => (
+                      <div key={level} className="flex items-center my-3">
+                          <div className={`w-[50px] h-[20px] border-2 ${level} border-black mx-1 ${className}`}></div>
+                          <p className="text-sm">{`= ${level}`}</p>
+                        </div>
+                        ))
+                      }
                 </div>
             </div>
         </>
